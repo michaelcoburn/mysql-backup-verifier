@@ -1,0 +1,4 @@
+# sample instances file
+3332    app-jira01      ibdata1:1024M:autoextend
+3316    db-backup-slaves01      ibdata1:2000M:autoextend
+3318    db-backup-slaves01      ibdata1:2000M:autoextend
