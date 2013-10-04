@@ -62,6 +62,7 @@ echo -e "INST\tSUCCESS" > $STATUSLOG
 # main application loop
 for instance in $INSTANCES; do
     pid='undef'
+    # Set up the environment
     DATADIR="${ROOTDIR}/${instance}"
     green "BEGINNING WORK ON INSTANCE: $instance"
     WORKDIR="${ROOTDIR}/$instance"
@@ -78,11 +79,13 @@ for instance in $INSTANCES; do
     for bf in `find . -iname "*\.qp"`;
         do qpress -dvfT12 $bf $(dirname $bf) && rm -vf $bf;
     done
+    # do crash recovery
     green "APPLYING LOGS"
     innobackupex --use-memory=5G --apply-log $WORKDIR
     green "UPDATING PERMISSIONS, CLEANING UP FILES"
     chown -R mysql:mysql $WORKDIR
     rm -vf ib_logfile*
+    # Configure replication
     green "SETTING UP REPLICATION"
     if [ -e "xtrabackup_binlog_pos_innodb" ] ;
         then
