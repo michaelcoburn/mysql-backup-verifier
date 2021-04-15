@@ -9,8 +9,16 @@
 # Script accepts 2 arguments:
 # $1 = mode , which is either test or prod
 # $2 = instances file
-#
 
+# Variable definitions
+YESTERDAY=`date --date="2 days ago" +%Y%m%d`
+ROOTDIR="/data/percona"
+INSTANCESFILE=$2
+INSTANCESOURCE="${ROOTDIR}/${INSTANCESFILE}"
+INSTANCES=`awk '{print $1}' $INSTANCESOURCE`
+BACKUPDIR="/data/backup-snapshots"
+USER="mysql"
+INITFILE="init-replication"
 # Functions
 NORMAL=$(tput sgr0)
 GREEN=$(tput setaf 2; tput bold)
@@ -47,14 +55,6 @@ elif [ "$MODE" = "prod" ] ; then
     SERVERID=9999
     green "IN PRODUCTION MODE"
 fi
-YESTERDAY=`date --date="2 days ago" +%Y%m%d`
-ROOTDIR="/data/percona"
-INSTANCESFILE=$2
-INSTANCESOURCE="${ROOTDIR}/${INSTANCESFILE}"
-INSTANCES=`awk '{print $1}' $INSTANCESOURCE`
-BACKUPDIR="/data/backup-snapshots"
-USER="mysql"
-INITFILE="init-replication"
 
 # insert header, zero out the file
 echo -e "INST\tSUCCESS" > $STATUSLOG
